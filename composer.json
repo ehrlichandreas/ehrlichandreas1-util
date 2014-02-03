@@ -1,0 +1,30 @@
+{
+    "name":         "ehrlichandreas/util",
+    "description":  "Zend Framework like util module",
+    "type":         "util",
+    "keywords": 
+    [
+    ],
+    "license":              "Unlicense",
+    "minimum-stability":    "dev",
+    "authors": 
+    [
+        {
+            "name":     "Andreas Ehrlich",
+            "email":    "ehrlich.andreas@googlemail.com"
+        }
+    ],
+    "autoload": 
+    {
+        "psr-0": 
+        {
+            "EhrlichAndreas":   "src/"
+        }
+    },
+    "require": 
+    {
+        "php":                          ">=5.3.2"
+    },
+    "require-dev": {
+    }
+}
