@@ -121,3 +121,5 @@ class EhrlichAndreas_Util_Vsprintf
 		return $format;
 	}
 }
+
+?>
