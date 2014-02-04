@@ -39,7 +39,7 @@ class EhrlichAndreas_Util_Array
         {
             if (is_array($array))
             {
-                $input[$key] = EhrlichAndreas_Util_Array::arrayChangeKeyCaseRecursive($array, $case);
+                $input[$key] = self::arrayChangeKeyCaseRecursive($array, $case);
             }
         }
         
