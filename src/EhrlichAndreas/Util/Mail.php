@@ -1,10 +1,10 @@
 <?php
 
-require_once 'EhrlichAndreas/Util/Exception.php';
+//require_once 'EhrlichAndreas/Util/Exception.php';
 
-require_once 'EhrlichAndreas/Util/Array.php';
+//require_once 'EhrlichAndreas/Util/Array.php';
 
-require_once 'EhrlichAndreas/Util/Mime.php';
+//require_once 'EhrlichAndreas/Util/Mime.php';
 
 /**
  *
@@ -644,7 +644,7 @@ class EhrlichAndreas_Util_Mail
 		
 		if ($zfVersion == 1)
 		{
-			require_once 'Zend/Loader/Autoloader.php';
+			//require_once 'Zend/Loader/Autoloader.php';
 			
 			$options = array
 			(
@@ -997,7 +997,7 @@ class EhrlichAndreas_Util_Mail
 			
 			if ($conf['zfversion'] == 1)
 			{
-                require_once 'Zend/Mail.php';
+                //require_once 'Zend/Mail.php';
 
 				$message = new Zend_Mail($conf['charset']);
 				

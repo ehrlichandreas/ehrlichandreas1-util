@@ -1,6 +1,6 @@
 <?php
 
-require_once 'EhrlichAndreas/Util/Regex.php';
+//require_once 'EhrlichAndreas/Util/Regex.php';
 
 /**
  *
