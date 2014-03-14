@@ -418,4 +418,3 @@ class EhrlichAndreas_Util_Array
     }
 }
 
-?>

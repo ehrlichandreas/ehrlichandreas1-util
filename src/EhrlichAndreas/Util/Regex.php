@@ -51,4 +51,3 @@ class EhrlichAndreas_Util_Regex
 	}
 }
 
-?>

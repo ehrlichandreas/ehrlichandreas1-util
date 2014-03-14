@@ -83,4 +83,3 @@ class EhrlichAndreas_Util_Exception extends Exception
     }
 }
 
-?>

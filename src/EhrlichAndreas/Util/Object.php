@@ -43,4 +43,3 @@ class EhrlichAndreas_Util_Object
     }
 }
 
-?>

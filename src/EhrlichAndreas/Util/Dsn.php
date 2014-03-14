@@ -96,4 +96,3 @@ class EhrlichAndreas_Util_Dsn
     }
 }
 
-?>

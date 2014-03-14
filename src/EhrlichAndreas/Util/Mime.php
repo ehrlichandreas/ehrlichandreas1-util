@@ -460,4 +460,3 @@ class EhrlichAndreas_Util_Mime
 	);
 }
 
-?>
