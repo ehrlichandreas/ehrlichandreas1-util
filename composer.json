@@ -23,9 +23,22 @@
     },
     "require": 
     {
-        "php":  ">=5.1"
+        "php":  ">=5.1",
+
+        "xrstf/composer-php52": "1.*@dev"
     },
     "require-dev":
     {
+    },
+    "scripts":
+    {
+        "post-install-cmd":
+        [
+            "xrstf\\Composer52\\Generator::onPostInstallCmd"
+        ],
+        "post-update-cmd":
+        [
+            "xrstf\\Composer52\\Generator::onPostInstallCmd"
+        ]
     }
 }
