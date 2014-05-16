@@ -729,6 +729,8 @@ class EhrlichAndreas_Util_Mail
 				case 'Zend_Mail_Transport_Sendmail':
 					
 				default:
+                    $options['port'] = '';
+                    
 					$transport = new $transportName($options);
 					
 					break;
@@ -911,7 +913,7 @@ class EhrlichAndreas_Util_Mail
 				{
 					$email = EhrlichAndreas_Util_Vsprintf::vsprintf($value['email'], $replacement);
 					
-					$name = null;
+					$name = '';
 					
 					if (isset($value['name']))
 					{
@@ -938,7 +940,7 @@ class EhrlichAndreas_Util_Mail
 				{
 					$email = EhrlichAndreas_Util_Vsprintf::vsprintf($value['email'], $replacement);
 					
-					$name = null;
+					$name = '';
 					
 					if (isset($value['name']))
 					{
@@ -957,7 +959,7 @@ class EhrlichAndreas_Util_Mail
 				{
 					$email = EhrlichAndreas_Util_Vsprintf::vsprintf($value['email'], $replacement);
 					
-					$name = null;
+					$name = '';
 					
 					if (isset($value['name']))
 					{
@@ -1043,21 +1045,21 @@ class EhrlichAndreas_Util_Mail
 			{
 				$name = $toName[$key];
 				
-				$message->addTo($email, $name);
+                $message->addTo($email, $name);
 			}
 			
 			foreach ($ccEmail as $key => $email)
 			{
 				$name = $ccName[$key];
 				
-				$message->addCc($email, $name);
+                $message->addCc($email, $name);
 			}
 			
 			foreach ($bccEmail as $key => $email)
 			{
 				$name = $bccName[$key];
 				
-				$message->addBcc($email, $name);
+                $message->addBcc($email, $name);
 			}
 			
 			if ($conf['zfversion'] == 1)
@@ -1275,6 +1277,28 @@ class EhrlichAndreas_Util_Mail
 					$headers->addHeader($headerTmp);
 				}
 			}
+            
+            /**
+            echo '<pre>';
+            var_dump
+            (
+                $fromEmail,
+                $fromName,
+                $replytoEmail,
+                $replytoName,
+                $toEmail,
+                $toName,
+                $ccEmail,
+                $ccName,
+                $bccEmail,
+                $bccName,
+                $header,
+                $subject,
+                $bodyHtml,
+                $bodyText
+            );
+            die();
+            **/
 			
 			$messageTransport = $conf['transport'];
 
