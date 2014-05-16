@@ -72,10 +72,10 @@ class EhrlichAndreas_Util_Mail
 	{
 		if (is_null($name))
 		{
-			return !empty($this->config);
+			return !empty($this->configs);
 		}
 		
-		if (is_scalar($name) && isset($this->config[$name]) && !empty($this->config[$name]))
+		if (is_scalar($name) && isset($this->configs[$name]) && !empty($this->configs[$name]))
 		{
 			return true;
 		}
