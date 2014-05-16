@@ -396,7 +396,7 @@ class EhrlichAndreas_Util_Mail
 	 * 
 	 * @param array $options
 	 * @param int $zfVersion
-	 * @return \transportName
+	 * @return transportName
 	 * @throws Zend_Application_Resource_Exception
 	 */
 	protected function setupZfVersion($options = array())
@@ -430,7 +430,7 @@ class EhrlichAndreas_Util_Mail
 	 * 
 	 * @param array $options
 	 * @param int $zfVersion
-	 * @return \transportName
+	 * @return transportName
 	 * @throws Zend_Application_Resource_Exception
 	 */
 	protected function setupTransport($options = array(), $zfVersion = 0)
@@ -759,13 +759,16 @@ class EhrlichAndreas_Util_Mail
 					{
 						$options['connection_config']['ssl'] = $ssl;
 					}
+                    
+                    $classSmtpOptions = 'Zend\\Mail\\Transport\\SmtpOptions';
 					
-					$transportOptions = new Zend\Mail\Transport\SmtpOptions();
+					$transportOptions = new $classSmtpOptions();
 					
 					$transportOptions->setFromArray($options);
 					
+                    $classSmtp = 'Zend\\Mail\\Transport\\Smtp';
 					
-					$transport = new Zend\Mail\Transport\Smtp();
+					$transport = new $classSmtp();
 
 					$transport->setOptions($transportOptions);
 					
@@ -781,20 +784,25 @@ class EhrlichAndreas_Util_Mail
 					{
 						$options['callback'] = $callback;
 					}
+                    
+                    $classFileOptions = 'Zend\\Mail\\Transport\\FileOptions';
 					
-					$transportOptions = new Zend\Mail\Transport\FileOptions();
+					$transportOptions = new $classFileOptions();
 					
 					$transportOptions->setFromArray($options);
 					
+                    $classFile = 'Zend\\Mail\\Transport\\File';
 					
-					$transport = new Zend\Mail\Transport\File();
+					$transport = new $classFile();
 
 					$transport->setOptions($transportOptions);
 					
 					break;
 					
 				default:
-					$transport = new Zend\Mail\Transport\Sendmail();
+                    $classSendmail = 'Zend\\Mail\\Transport\\Sendmail';
+                    
+					$transport = new $classSendmail();
 					
 					break;
 			}
@@ -1005,11 +1013,15 @@ class EhrlichAndreas_Util_Mail
 			}
 			elseif ($conf['zfversion'] == 2)
 			{
-				$message = new Zend\Mail\Message();
+                $classMailMessage = 'Zend\\Mail\\Message';
+                
+				$message = new $classMailMessage();
 				
 				$message->setEncoding($conf['charset']);
 				
-				$mimeBody = new Zend\Mime\Message();
+                $classMimeMessage = 'Zend\\Mime\\Message';
+                
+				$mimeBody = new $classMimeMessage();
 				
 				$message->setBody($mimeBody);
 				
@@ -1063,7 +1075,9 @@ class EhrlichAndreas_Util_Mail
 				
 				foreach ($header as $key => $value)
 				{
-					$headerTmp = new Zend\Mail\Header\GenericMultiHeader($value['name'], $value['value']);
+                    $classGenericMultiHeader = 'Zend\\Mail\\Header\\GenericMultiHeader';
+                    
+					$headerTmp = new $classGenericMultiHeader($value['name'], $value['value']);
 					
 					$headerTmp->setEncoding($conf['charset']);
 					
@@ -1098,7 +1112,9 @@ class EhrlichAndreas_Util_Mail
 				
 				if (!is_null($bodyText))
 				{
-					$textPart = new Zend\Mime\Part($bodyText);
+                    $classMimePart = 'Zend\\Mime\\Part';
+                    
+					$textPart = new $classMimePart($bodyText);
 					
 					$textPart->type = 'text/plain';
 					
@@ -1108,8 +1124,9 @@ class EhrlichAndreas_Util_Mail
 					
 					$message->getBody()->addPart($textPart);
                     
-                    
-					$headerTmp = new Zend\Mail\Header\GenericMultiHeader('content-type', 'text/plain; charset=' . $conf['charset']);
+                    $classGenericMultiHeader = 'Zend\\Mail\\Header\\GenericMultiHeader';
+                
+					$headerTmp = new $classGenericMultiHeader('content-type', 'text/plain; charset=' . $conf['charset']);
 
 					$headerTmp->setEncoding('ASCII');
                     
@@ -1122,7 +1139,9 @@ class EhrlichAndreas_Util_Mail
 				
 				if (!is_null($bodyHtml))
 				{
-					$htmlPart = new Zend\Mime\Part($bodyHtml);
+                    $classMimePart = 'Zend\\Mime\\Part';
+                    
+					$htmlPart = new $classMimePart($bodyHtml);
 					
 					$htmlPart->type = 'text/html';
 					
@@ -1132,8 +1151,9 @@ class EhrlichAndreas_Util_Mail
 					
 					$message->getBody()->addPart($htmlPart);
                     
-                    
-					$headerTmp = new Zend\Mail\Header\GenericMultiHeader('content-type', 'text/html; charset=' . $conf['charset']);
+                    $classGenericMultiHeader = 'Zend\\Mail\\Header\\GenericMultiHeader';
+                
+					$headerTmp = new $classGenericMultiHeader('content-type', 'text/html; charset=' . $conf['charset']);
 
 					$headerTmp->setEncoding('ASCII');
                     
@@ -1214,7 +1234,9 @@ class EhrlichAndreas_Util_Mail
 				//$headers->setEncoding('ASCII');
 					
 				
-				$headerTmp = new Zend\Mail\Header\GenericMultiHeader('Content-Transfer-Encoding', $conf['encoding']);
+                $classGenericMultiHeader = 'Zend\\Mail\\Header\\GenericMultiHeader';
+                
+				$headerTmp = new $classGenericMultiHeader('Content-Transfer-Encoding', $conf['encoding']);
 
 				$headerTmp->setEncoding('ASCII');
 
@@ -1231,8 +1253,9 @@ class EhrlichAndreas_Util_Mail
                     
                     $boundary = $message->getBody()->getMime()->boundary();
                     
+                    $classGenericMultiHeader = 'Zend\\Mail\\Header\\GenericMultiHeader';
                     
-                    $headerTmp = new Zend\Mail\Header\GenericMultiHeader('content-type', 'multipart/alternative; boundary="' . $boundary . '"');
+                    $headerTmp = new $classGenericMultiHeader('content-type', 'multipart/alternative; boundary="' . $boundary . '"');
 
                     $headerTmp->setEncoding('ASCII');
 
@@ -1242,7 +1265,9 @@ class EhrlichAndreas_Util_Mail
 				
 				if (false && $message->getBody()->isMultiPart())
 				{
-					$headerTmp = new Zend\Mail\Header\GenericMultiHeader('content-type', 'multipart/alternative; charset=' . $conf['charset']);
+                    $classGenericMultiHeader = 'Zend\\Mail\\Header\\GenericMultiHeader';
+                    
+					$headerTmp = new $classGenericMultiHeader('content-type', 'multipart/alternative; charset=' . $conf['charset']);
 
 					$headerTmp->setEncoding('ASCII');
 
