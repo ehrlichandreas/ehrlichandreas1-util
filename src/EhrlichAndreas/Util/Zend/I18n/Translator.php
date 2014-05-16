@@ -35,7 +35,7 @@ class EhrlichAndreas_Util_Zend_I18n_Translator
         
         $messages = eval($messages);
         
-        $messages = \MiniPhp_Util_Array::objectToArray($messages);
+        $messages = EhrlichAndreas_Util_Array::objectToArray($messages);
         
         $messages = $messages[0]['messages'];
         
