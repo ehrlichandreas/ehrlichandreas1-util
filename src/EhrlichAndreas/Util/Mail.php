@@ -1277,6 +1277,11 @@ class EhrlichAndreas_Util_Mail
 			}
 			
 			$messageTransport = $conf['transport'];
+            
+            echo '<pre>';
+            print_r($messageTransport);
+            print_r($message);
+            die();
 
 			$messageTransport->send($message);
 			
