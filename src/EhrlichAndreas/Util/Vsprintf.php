@@ -82,6 +82,7 @@ class EhrlichAndreas_Util_Vsprintf
                         '%(' . $key . ')s',
                         '{' . $key . '}',
                         '[' . $key . ']',
+                        '[i18n]' . $key . '[/i18n]',
                     );
 
                     $format = str_replace($search, (string)$value, $format);

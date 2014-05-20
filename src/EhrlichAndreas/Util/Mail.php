@@ -832,7 +832,7 @@ class EhrlichAndreas_Util_Mail
 	 * @param bool $log
 	 * @return bool
 	 */
-	public function send($config = null, $replacement = array(), $attachment = array(), $log = false)
+	public function send($config = null, $replacement = array(), $attachment = array(), $log = false, $vsprintfTimes = 1)
 	{
 		if (is_scalar($config))
 		{
@@ -863,7 +863,7 @@ class EhrlichAndreas_Util_Mail
 
 		foreach ($config as $conf)
 		{
-			$fromEmail = EhrlichAndreas_Util_Vsprintf::vsprintf($conf['from']['email'], $replacement);
+			$fromEmail = EhrlichAndreas_Util_Vsprintf::vsprintf($conf['from']['email'], $replacement, $vsprintfTimes);
 			
 			$fromName = null;
 		
@@ -894,30 +894,30 @@ class EhrlichAndreas_Util_Mail
 			
 			if (isset($conf['from']['name']))
 			{
-				$fromName = EhrlichAndreas_Util_Vsprintf::vsprintf($conf['from']['name'], $replacement);
+				$fromName = EhrlichAndreas_Util_Vsprintf::vsprintf($conf['from']['name'], $replacement, $vsprintfTimes);
 			}
 			
 			if (isset($conf['replyto']['email']))
 			{
-				$replytoEmail = EhrlichAndreas_Util_Vsprintf::vsprintf($conf['replyto']['email'], $replacement);
+				$replytoEmail = EhrlichAndreas_Util_Vsprintf::vsprintf($conf['replyto']['email'], $replacement, $vsprintfTimes);
 			}
 			
 			if (isset($conf['replyto']['name']))
 			{
-				$replytoName = EhrlichAndreas_Util_Vsprintf::vsprintf($conf['replyto']['name'], $replacement);
+				$replytoName = EhrlichAndreas_Util_Vsprintf::vsprintf($conf['replyto']['name'], $replacement, $vsprintfTimes);
 			}
 			
 			if (count($conf['to']) > 0)
 			{
 				foreach ($conf['to'] as $key => $value)
 				{
-					$email = EhrlichAndreas_Util_Vsprintf::vsprintf($value['email'], $replacement);
+					$email = EhrlichAndreas_Util_Vsprintf::vsprintf($value['email'], $replacement, $vsprintfTimes);
 					
 					$name = '';
 					
 					if (isset($value['name']))
 					{
-						$name = EhrlichAndreas_Util_Vsprintf::vsprintf($value['name'], $replacement);
+						$name = EhrlichAndreas_Util_Vsprintf::vsprintf($value['name'], $replacement, $vsprintfTimes);
 					}
 					
 					//TODO
@@ -938,13 +938,13 @@ class EhrlichAndreas_Util_Mail
 			{
 				foreach ($conf['cc'] as $key => $value)
 				{
-					$email = EhrlichAndreas_Util_Vsprintf::vsprintf($value['email'], $replacement);
+					$email = EhrlichAndreas_Util_Vsprintf::vsprintf($value['email'], $replacement, $vsprintfTimes);
 					
 					$name = '';
 					
 					if (isset($value['name']))
 					{
-						$name = EhrlichAndreas_Util_Vsprintf::vsprintf($value['name'], $replacement);
+						$name = EhrlichAndreas_Util_Vsprintf::vsprintf($value['name'], $replacement, $vsprintfTimes);
 					}
 					
 					$ccEmail[$key] = $email;
@@ -957,13 +957,13 @@ class EhrlichAndreas_Util_Mail
 			{
 				foreach ($conf['bcc'] as $key => $value)
 				{
-					$email = EhrlichAndreas_Util_Vsprintf::vsprintf($value['email'], $replacement);
+					$email = EhrlichAndreas_Util_Vsprintf::vsprintf($value['email'], $replacement, $vsprintfTimes);
 					
 					$name = '';
 					
 					if (isset($value['name']))
 					{
-						$name = EhrlichAndreas_Util_Vsprintf::vsprintf($value['name'], $replacement);
+						$name = EhrlichAndreas_Util_Vsprintf::vsprintf($value['name'], $replacement, $vsprintfTimes);
 					}
 					
 					$bccEmail[$key] = $email;
@@ -987,19 +987,19 @@ class EhrlichAndreas_Util_Mail
 			
 			if (isset($conf['subject']) && strlen($conf['subject']) > 0)
 			{
-				$subject = EhrlichAndreas_Util_Vsprintf::vsprintf($conf['subject'], $replacement);
+				$subject = EhrlichAndreas_Util_Vsprintf::vsprintf($conf['subject'], $replacement, $vsprintfTimes);
 			}
 			
 			if (isset($conf['body']['html']) && strlen($conf['body']['html']) > 0)
 			{
-				$bodyHtml = EhrlichAndreas_Util_Vsprintf::vsprintf($conf['body']['html'], $replacement);
+				$bodyHtml = EhrlichAndreas_Util_Vsprintf::vsprintf($conf['body']['html'], $replacement, $vsprintfTimes);
 				
 				$bodyHtml = preg_replace('#\r?\n|\r\n?#ui', $conf['eol'], $bodyHtml);
 			}
 			
 			if (isset($conf['body']['text']) && strlen($conf['body']['text']) > 0)
 			{
-				$bodyText = EhrlichAndreas_Util_Vsprintf::vsprintf($conf['body']['text'], $replacement);
+				$bodyText = EhrlichAndreas_Util_Vsprintf::vsprintf($conf['body']['text'], $replacement, $vsprintfTimes);
 				
 				$bodyText = preg_replace('#\r?\n|\r\n?#ui', $conf['eol'], $bodyText);
 			}
@@ -1297,6 +1297,7 @@ class EhrlichAndreas_Util_Mail
                 $bodyHtml,
                 $bodyText
             );
+            print_r($replacement);
             die();
             **/
 			
