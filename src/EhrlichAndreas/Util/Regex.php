@@ -11,6 +11,7 @@ class EhrlichAndreas_Util_Regex
 	{
 		$search = array
 		(
+			'\\',
 			'/',
 			'^',
 			'.',
@@ -30,6 +31,7 @@ class EhrlichAndreas_Util_Regex
 		
 		$replace = array
 		(
+			'\\\\',
 			'\/',
 			'\^',
 			'\.',
