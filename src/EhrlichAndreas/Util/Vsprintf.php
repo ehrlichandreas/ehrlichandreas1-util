@@ -69,7 +69,7 @@ class EhrlichAndreas_Util_Vsprintf
         
 		for ($i = 0; $i < $times; $i++)
         {
-            $args = $argsTmp;
+            $args = (array) $argsTmp;
             
             foreach ($args as $key => $value)
             {
@@ -112,10 +112,17 @@ class EhrlichAndreas_Util_Vsprintf
                     unset($args[$key]);
                 }
             }
-		
-            if (count($args) > 0)
+
+            $vsprintfRegex = "~%(?:(\d+)[$])?[-+]?(?:[ 0]|['].)?(?:[-]?\d+)?(?:[.]\d+)?[%bcdeEufFgGosxX]~";
+
+            if (count($args) > 0 && preg_match_all($vsprintfRegex, $format, $expected) > 0)
             {
-                $format = vsprintf($format, $args);
+                $expected = intval(max($expected[1], count(array_unique($expected[1]))));
+
+                if (count($args) >= $expected)
+                {
+                    $format = vsprintf($format, $args); // yeah!
+                }
             }
         }
 		
