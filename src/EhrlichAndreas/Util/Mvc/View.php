@@ -1,14 +1,32 @@
 <?php
 
+$error_reporting_EhrlichAndreas_Util_Mvc_View = error_reporting();
+
+error_reporting(0);
+
 /**
  *
  * @author Ehrlich, Andreas <ehrlich.andreas@googlemail.com>
  */
 class EhrlichAndreas_Util_Mvc_View
 {
-    protected $scriptPath = null;
+
+    /**
+     * Callback for escaping.
+     *
+     * @var string
+     */
+    protected $_escape = 'htmlspecialchars';
+
+    /**
+     * Encoding to use in escaping mechanisms; defaults to utf-8
+     * @var string
+     */
+    protected $_encoding = 'UTF-8';
     
-    protected $fileExtension = 'phtml';
+    protected $_scriptPath = null;
+    
+    protected $_fileExtension = 'phtml';
 
 	/**
 	 * @var array Variables container
@@ -58,8 +76,8 @@ class EhrlichAndreas_Util_Mvc_View
      * @param string $name The variable name.
      * @param mixed $value The variable value.
      * @return void
-     * @throws Zend_View_Exception if an attempt to set a private or protected
-     * member is detected
+     * @throws EhrlichAndreas_Util_Exception if an attempt to set a private or 
+     * protected member is detected
      */
 	public function __set($name, $value)
     {
@@ -98,16 +116,6 @@ class EhrlichAndreas_Util_Mvc_View
 	}
 
     /**
-     * Includes the view script in a scope with only public $this variables.
-     *
-     * @param string The view script to execute.
-     */
-    protected function _run()
-    {
-        include func_get_arg(0);
-    }
-
-    /**
      * Finds a view script from the available directories.
      *
      * @param string $name The base name of the script.
@@ -115,9 +123,18 @@ class EhrlichAndreas_Util_Mvc_View
      */
     protected function _script($name)
     {
-        $scriptPath = rtrim($this->scriptPath, '\\/') . DIRECTORY_SEPARATOR;
+        if (is_null($this->_scriptPath))
+        {
+            $message = 'no view script directory set; unable to determine location for view script';
+            
+            $e = new EhrlichAndreas_Util_Exception($message);
+            
+            throw $e;
+        }
         
-        $fileExtension = '.' . ltrim($this->fileExtension, '.');
+        $scriptPath = rtrim($this->_scriptPath, '\\/') . DIRECTORY_SEPARATOR;
+        
+        $fileExtension = '.' . ltrim($this->_fileExtension, '.');
         
         $file = $name . $fileExtension ;
         
@@ -133,6 +150,16 @@ class EhrlichAndreas_Util_Mvc_View
         $e = new EhrlichAndreas_Util_Exception($message);
         
         throw $e;
+    }
+
+    /**
+     * Includes the view script in a scope with only public $this variables.
+     *
+     * @param string The view script to execute.
+     */
+    protected function _run()
+    {
+        include func_get_arg(0);
     }
 
 	/**
@@ -189,6 +216,115 @@ class EhrlichAndreas_Util_Mvc_View
 	}
 
     /**
+     * Clear all assigned variables
+     *
+     * Clears all variables assigned to EhrlichAndreas_Util_Mvc_View either 
+     * via {@link assign()} or property overloading ({@link __set()}).
+     *
+     * @return void
+     */
+    public function clearVars()
+    {
+        foreach ($this->_vars as $key => $value)
+        {
+            unset($this->_vars[$key]);
+        }
+    }
+
+    /**
+     * Escapes a value for output in a view script.
+     *
+     * If escaping mechanism is one of htmlspecialchars or htmlentities, uses
+     * {@link $_encoding} setting.
+     *
+     * @param mixed $var The output to escape.
+     * @return mixed The escaped value.
+     */
+    public function escape($var)
+    {
+        $escape = $this->_escape;
+        
+        $encoding = $this->_encoding;
+        
+        if (in_array($escape, array('htmlspecialchars', 'htmlentities')))
+        {
+            return call_user_func($escape, $var, ENT_COMPAT, $encoding);
+        }
+
+        if (1 == func_num_args())
+        {
+            return call_user_func($escape, $var);
+        }
+        
+        $args = func_get_args();
+        
+        return call_user_func_array($escape, $args);
+    }
+
+    /**
+     * Return current escape encoding
+     *
+     * @return string
+     */
+    public function getEncoding()
+    {
+        return $this->_encoding;
+    }
+
+    /**
+     * Return full path to a view script specified by $name
+     *
+     * @param  string $name
+     * @return false|string False if script not found
+     * @throws EhrlichAndreas_Util_Exception if no script directory set
+     */
+    public function getScriptPath($name)
+    {
+        try
+        {
+            $path = $this->_script($name);
+            
+            return $path;
+        }
+        catch (EhrlichAndreas_Util_Exception $e)
+        {
+            if (strstr($e->getMessage(), 'no view script directory set'))
+            {
+                throw $e;
+            }
+
+            return false;
+        }
+    }
+
+    /**
+     * Return list of all assigned variables
+     *
+     * Returns all public properties of the object. Reflection is not used
+     * here as testing reflection properties for visibility is buggy.
+     *
+     * @return array
+     */
+    public function getVars()
+    {
+        $vars = $this->_vars;
+
+        return $vars;
+    }
+
+    /**
+     * Allow custom object initialization when extending 
+     * EhrlichAndreas_Util_Mvc_View
+     *
+     * Triggered by {@link __construct() the constructor} as its final action.
+     *
+     * @return void
+     */
+    public function init()
+    {
+    }
+
+    /**
      * Processes a view script and returns the output.
      *
      * @param string $name The script name to process.
@@ -198,7 +334,9 @@ class EhrlichAndreas_Util_Mvc_View
     {
         // find the script file name using the parent private method
         $file = $this->_script($name);
-        unset($name); // remove $name from local scope
+        
+        // remove $name from local scope
+        unset($name);
 
         ob_start();
         
@@ -210,5 +348,36 @@ class EhrlichAndreas_Util_Mvc_View
 
         return $content;
     }
+
+    /**
+     * Set encoding to use with htmlentities() and htmlspecialchars()
+     *
+     * @param string $encoding
+     * @return EhrlichAndreas_Util_Mvc_View
+     */
+    public function setEncoding($encoding)
+    {
+        $this->_encoding = $encoding;
+        return $this;
+    }
+
+    /**
+     * Resets the stack of view script paths.
+     *
+     * To clear path, use EhrlichAndreas_Util_Mvc_View::setScriptPath(null).
+     *
+     * @param string|array The directory (-ies) to set as the path.
+     * @return EhrlichAndreas_Util_Mvc_View
+     */
+    public function setScriptPath($path)
+    {
+        $this->_scriptPath = $path;
+        
+        return $this;
+    }
 }
 
+
+error_reporting($error_reporting_EhrlichAndreas_Util_Mvc_View);
+
+unset($error_reporting_EhrlichAndreas_Util_Mvc_View);
