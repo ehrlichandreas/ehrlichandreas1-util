@@ -721,8 +721,16 @@ class EhrlichAndreas_Util_Mail
 							'A host is necessary for smtp transport,'
 							.' but none was given');
 					}
+                    
+                    $optionsTmp = $options;
+                    
+                    unset($optionsTmp['smtp']);
+                    
+                    unset($optionsTmp['host']);
+                    
+                    unset($optionsTmp['name']);
 
-					$transport = new $transportName($options['host'], $options);
+					$transport = new $transportName($options['host'], $optionsTmp);
 					
 					break;
 				

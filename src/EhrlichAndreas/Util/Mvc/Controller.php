@@ -127,3 +127,4 @@ class EhrlichAndreas_Util_Mvc_Controller
         $this->_view = $view;
     }
 }
+

@@ -381,3 +381,4 @@ class EhrlichAndreas_Util_Mvc_View
 error_reporting($error_reporting_EhrlichAndreas_Util_Mvc_View);
 
 unset($error_reporting_EhrlichAndreas_Util_Mvc_View);
+
