@@ -8,6 +8,13 @@ class EhrlichAndreas_Util_Mvc
 {
 
     /**
+     * Whether or not to return the response prior to rendering output while in
+     * {@link dispatch()}; default is to send headers and render output.
+     * @var boolean
+     */
+    protected $_returnResponse = false;
+
+    /**
      * Set whether {@link dispatch()} should return the response without first
      * rendering output. By default, output is rendered and dispatch() returns
      * nothing.
@@ -39,6 +46,10 @@ class EhrlichAndreas_Util_Mvc
         {
             $invokeParams = array_merge($_GET, $_POST);
         }
+        
+        $invokeParams = EhrlichAndreas_Util_Array::objectToArray($invokeParams);
+        
+        $invokeParams = new EhrlichAndreas_Util_Mvc_Parameter($invokeParams);
         
 		$returnResponse = $this->returnResponse();
     }

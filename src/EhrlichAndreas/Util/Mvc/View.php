@@ -29,9 +29,14 @@ class EhrlichAndreas_Util_Mvc_View
     protected $_fileExtension = 'phtml';
 
 	/**
-	 * @var array Variables container
+	 * @var EhrlichAndreas_Util_Mvc_Parameter Variables container
 	 */
-	protected $_vars = array();
+	protected $_vars = null;
+    
+    public function __construct()
+    {
+        $this->_vars = new EhrlichAndreas_Util_Mvc_Parameter();
+    }
 
     /**
 	 *
@@ -105,7 +110,7 @@ class EhrlichAndreas_Util_Mvc_View
     {
 		$vars = $this->_vars;
         
-		if (!isset($vars[$name]))
+		if (! isset($vars[$name]))
         {
 			return;
 		}
@@ -192,15 +197,14 @@ class EhrlichAndreas_Util_Mvc_View
 		if (is_string($spec))
         {
 			// assign by name and value
-            
 			$this->__set($spec, $value);
 		}
         elseif (is_array($spec))
         {
 			// assign from associative array
-			foreach ($spec as $key=>$val)
+			foreach ($spec as $key => $val)
             {
-				$this->__set($key,$val);
+				$this->__set($key, $val);
 			}
 		}
         else
@@ -307,7 +311,7 @@ class EhrlichAndreas_Util_Mvc_View
      */
     public function getVars()
     {
-        $vars = $this->_vars;
+        $vars = $this->_vars->toArray();
 
         return $vars;
     }
