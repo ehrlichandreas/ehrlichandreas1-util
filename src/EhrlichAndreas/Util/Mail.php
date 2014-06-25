@@ -728,7 +728,10 @@ class EhrlichAndreas_Util_Mail
                     
                     unset($optionsTmp['host']);
                     
-                    unset($optionsTmp['name']);
+                    if (!isset($optionsTmp['name']))
+                    {
+                        $optionsTmp['name'] = '127.0.0.1';
+                    }
 
 					$transport = new $transportName($options['host'], $optionsTmp);
 					
@@ -1308,10 +1311,34 @@ class EhrlichAndreas_Util_Mail
             print_r($replacement);
             die();
             **/
+
+			if ($conf['zfversion'] == 1)
+			{
+            	$defaultTranslator = Zend_Validate_Abstract::getDefaultTranslator();
+
+            	Zend_Validate_Abstract::setDefaultTranslator(null);
+                
+                $defaultTranslatorOptions = $defaultTranslator->getOptions();
+                
+                $defaultTranslator->setOptions(array('logUntranslated'=>false));
+			}
+			else
+			{
+			}
 			
 			$messageTransport = $conf['transport'];
 
 			$messageTransport->send($message);
+
+			if ($conf['zfversion'] == 1)
+			{
+                $defaultTranslator->setOptions($defaultTranslatorOptions);
+                
+            	Zend_Validate_Abstract::setDefaultTranslator($translator);
+			}
+			else
+			{
+			}
 			
 			return $this;
 		}
