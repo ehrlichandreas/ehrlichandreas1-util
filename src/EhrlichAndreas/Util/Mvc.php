@@ -8,6 +8,16 @@ class EhrlichAndreas_Util_Mvc
 {
 
     /**
+     * Singleton instance
+     *
+     * Marked only as protected to allow extension of the class. To extend,
+     * simply override {@link getInstance()}.
+     *
+     * @var EhrlichAndreas_Util_Mvc
+     */
+    protected static $_instance = null;
+
+    /**
      * Whether or not to return the response prior to rendering output while in
      * {@link dispatch()}; default is to send headers and render output.
      * @var boolean
@@ -52,6 +62,21 @@ class EhrlichAndreas_Util_Mvc
         $invokeParams = new EhrlichAndreas_Util_Mvc_Parameter($invokeParams);
         
 		$returnResponse = $this->returnResponse();
+    }
+
+    /**
+     * Singleton instance
+     *
+     * @return EhrlichAndreas_Util_Mvc
+     */
+    public static function getInstance()
+    {
+        if (null === self::$_instance)
+        {
+            self::$_instance = new self();
+        }
+
+        return self::$_instance;
     }
 }
 
