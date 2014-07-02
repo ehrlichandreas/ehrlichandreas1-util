@@ -491,14 +491,19 @@ class EhrlichAndreas_Util_Mvc_Router
         {
             $this->addDefaultRoutes();
         }
+        
+        if (!is_object($request))
+        {
+            $request = new EhrlichAndreas_Util_Mvc_Request($request);
+        }
 
         // Find the matching route
         $routeMatched = false;
+        
+        $match = $request->getRequestUri();
 
         foreach (array_reverse($this->_routes, true) as $name => $route)
         {
-            $match = $request;
-
             if ($params = $route->match($match))
             {
                 $this->_setRequestParams($request, $params);
@@ -516,7 +521,7 @@ class EhrlichAndreas_Util_Mvc_Router
              throw new EhrlichAndreas_Util_Exception('No route matched the request', 404);
         }
 
-        if($this->_useCurrentParamsAsGlobal && is_object($request) && method_exists($request, 'getParams'))
+        if($this->_useCurrentParamsAsGlobal)
         {
             $params = $request->getParams();
             
