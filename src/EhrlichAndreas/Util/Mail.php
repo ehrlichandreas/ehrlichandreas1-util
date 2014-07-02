@@ -841,9 +841,11 @@ class EhrlichAndreas_Util_Mail
 	 * @param array $replacement
 	 * @param array $attachment
 	 * @param bool $log
+	 * @param integer $vsprintfTimes
+	 * @param callback $filter
 	 * @return bool
 	 */
-	public function send($config = null, $replacement = array(), $attachment = array(), $log = false, $vsprintfTimes = 1)
+	public function send($config = null, $replacement = array(), $attachment = array(), $log = false, $vsprintfTimes = 1, $filter = null)
 	{
 		if (is_scalar($config))
 		{
@@ -862,7 +864,7 @@ class EhrlichAndreas_Util_Mail
 			{
 				if ($att->filename)
 				{
-					$extension = strtolower(pathinfo(strval($att->filename),PATHINFO_EXTENSION));
+					$extension = strtolower(pathinfo(strval($att->filename), PATHINFO_EXTENSION));
 					
 					if (isset(EhrlichAndreas_Util_Mime::$MIME_TYPE[$extension]))
 					{
@@ -872,6 +874,32 @@ class EhrlichAndreas_Util_Mail
 			}
 		}
 
+        
+        if ($conf['zfversion'] == 1)
+        {
+            $tmp = Zend_Json::encode($replacement);
+        }
+        elseif ($conf['zfversion'] == 2)
+        {
+            $callback = array
+            (
+                'Zend\\Json\\Json',
+                'encode',
+            );
+            
+            $param_arr = array
+            (
+                $tmp,
+            );
+            
+            $tmp = call_user_func_array($callback, $param_arr);
+        }
+
+        $tmp = base64_encode($tmp);
+
+        $tmp = ' replacement=\''.$tmp.'\'';
+
+        
 		foreach ($config as $conf)
 		{
 			$fromEmail = EhrlichAndreas_Util_Vsprintf::vsprintf($conf['from']['email'], $replacement, $vsprintfTimes);
@@ -998,22 +1026,55 @@ class EhrlichAndreas_Util_Mail
 			
 			if (isset($conf['subject']) && strlen($conf['subject']) > 0)
 			{
-				$subject = EhrlichAndreas_Util_Vsprintf::vsprintf($conf['subject'], $replacement, $vsprintfTimes);
+                $subject = $conf['subject'];
+                
+				$subject = str_replace(' replacement=\'%replacement%\'', $tmp, $subject);
+                
+				$subject = EhrlichAndreas_Util_Vsprintf::vsprintf($subject, $replacement, $vsprintfTimes);
 			}
+            
+            if (!is_null($subject) && !is_null($filter))
+            {
+                $subject = call_user_func_array($filter, array($subject));
+            }
 			
 			if (isset($conf['body']['html']) && strlen($conf['body']['html']) > 0)
 			{
-				$bodyHtml = EhrlichAndreas_Util_Vsprintf::vsprintf($conf['body']['html'], $replacement, $vsprintfTimes);
-				
-				$bodyHtml = preg_replace('#\r?\n|\r\n?#ui', $conf['eol'], $bodyHtml);
+                $bodyHtml = $conf['body']['html'];
+                
+				$bodyHtml = str_replace(' replacement=\'%replacement%\'', $tmp, $bodyHtml);
+                
+				$bodyHtml = EhrlichAndreas_Util_Vsprintf::vsprintf($bodyHtml, $replacement, $vsprintfTimes);
 			}
+            
+            if (!is_null($bodyHtml) && !is_null($filter))
+            {
+                $bodyHtml = call_user_func_array($filter, array($bodyHtml));
+            }
+			
+            if (!is_null($bodyHtml))
+            {
+				$bodyHtml = preg_replace('#\r?\n|\r\n?#ui', $conf['eol'], $bodyHtml);
+            }
 			
 			if (isset($conf['body']['text']) && strlen($conf['body']['text']) > 0)
 			{
-				$bodyText = EhrlichAndreas_Util_Vsprintf::vsprintf($conf['body']['text'], $replacement, $vsprintfTimes);
-				
-				$bodyText = preg_replace('#\r?\n|\r\n?#ui', $conf['eol'], $bodyText);
+                $bodyText = $conf['body']['text'];
+                
+				$bodyText = str_replace(' replacement=\'%replacement%\'', $tmp, $bodyText);
+                
+				$bodyText = EhrlichAndreas_Util_Vsprintf::vsprintf($bodyText, $replacement, $vsprintfTimes);
 			}
+            
+            if (!is_null($bodyText) && !is_null($filter))
+            {
+                $bodyText = call_user_func_array($filter, array($bodyText));
+            }
+			
+            if (!is_null($bodyText))
+            {
+				$bodyText = preg_replace('#\r?\n|\r\n?#ui', $conf['eol'], $bodyText);
+            }
 			
 			
 			if ($conf['zfversion'] == 1)
@@ -1211,6 +1272,21 @@ class EhrlichAndreas_Util_Mail
 				 * 
 				 */
 			}
+            
+			if ($conf['zfversion'] == 1)
+			{
+                if (isset($conf['attachment']) && strlen($conf['attachment'])>0 && $conf['attachment'])
+                {
+                    foreach ($attachment as $att)
+                    {
+                        $message->addAttachment($att);
+                    }
+                }
+			}
+			elseif ($conf['zfversion'] == 2)
+			{
+                //TODO add attachements
+            }
 			
 /*
  * 
