@@ -874,30 +874,32 @@ class EhrlichAndreas_Util_Mail
 			}
 		}
 
-        
-        if ($conf['zfversion'] == 1)
+        if (!is_null($filter))
         {
-            $tmp = Zend_Json::encode($replacement);
-        }
-        elseif ($conf['zfversion'] == 2)
-        {
-            $callback = array
-            (
-                'Zend\\Json\\Json',
-                'encode',
-            );
-            
-            $param_arr = array
-            (
-                $tmp,
-            );
-            
-            $tmp = call_user_func_array($callback, $param_arr);
-        }
+            if ($config[0]['zfversion'] == 1)
+            {
+                $tmp = Zend_Json::encode($replacement);
+            }
+            elseif ($config[0]['zfversion'] == 2)
+            {
+                $callback = array
+                (
+                    'Zend\\Json\\Json',
+                    'encode',
+                );
 
-        $tmp = base64_encode($tmp);
+                $param_arr = array
+                (
+                    $tmp,
+                );
 
-        $tmp = ' replacement=\''.$tmp.'\'';
+                $tmp = call_user_func_array($callback, $param_arr);
+            }
+
+            $tmp = base64_encode($tmp);
+
+            $tmp = ' replacement=\''.$tmp.'\'';
+        }
 
         
 		foreach ($config as $conf)
@@ -1410,7 +1412,7 @@ class EhrlichAndreas_Util_Mail
 			{
                 $defaultTranslator->setOptions($defaultTranslatorOptions);
                 
-            	Zend_Validate_Abstract::setDefaultTranslator($translator);
+            	Zend_Validate_Abstract::setDefaultTranslator($defaultTranslator);
 			}
 			else
 			{
