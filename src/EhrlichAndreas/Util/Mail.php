@@ -1030,7 +1030,10 @@ class EhrlichAndreas_Util_Mail
 			{
                 $subject = $conf['subject'];
                 
-				$subject = str_replace(' replacement=\'%replacement%\'', $tmp, $subject);
+                if (!is_null($filter))
+                {
+                    $subject = str_replace(' replacement=\'%replacement%\'', $tmp, $subject);
+                }
                 
 				$subject = EhrlichAndreas_Util_Vsprintf::vsprintf($subject, $replacement, $vsprintfTimes);
 			}
@@ -1044,7 +1047,10 @@ class EhrlichAndreas_Util_Mail
 			{
                 $bodyHtml = $conf['body']['html'];
                 
-				$bodyHtml = str_replace(' replacement=\'%replacement%\'', $tmp, $bodyHtml);
+                if (!is_null($filter))
+                {
+                    $bodyHtml = str_replace(' replacement=\'%replacement%\'', $tmp, $bodyHtml);
+                }
                 
 				$bodyHtml = EhrlichAndreas_Util_Vsprintf::vsprintf($bodyHtml, $replacement, $vsprintfTimes);
 			}
@@ -1063,7 +1069,10 @@ class EhrlichAndreas_Util_Mail
 			{
                 $bodyText = $conf['body']['text'];
                 
-				$bodyText = str_replace(' replacement=\'%replacement%\'', $tmp, $bodyText);
+                if (!is_null($filter))
+                {
+                    $bodyText = str_replace(' replacement=\'%replacement%\'', $tmp, $bodyText);
+                }
                 
 				$bodyText = EhrlichAndreas_Util_Vsprintf::vsprintf($bodyText, $replacement, $vsprintfTimes);
 			}
