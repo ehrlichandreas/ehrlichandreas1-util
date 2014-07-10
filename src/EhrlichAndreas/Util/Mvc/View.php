@@ -24,18 +24,35 @@ class EhrlichAndreas_Util_Mvc_View
      */
     protected $_encoding = 'UTF-8';
     
-    protected $_scriptPath = null;
-    
+    /**
+     *
+     * @var string 
+     */
     protected $_fileExtension = 'phtml';
+    
+    /**
+     *
+     * @var string 
+     */
+    protected $_layout = 'layout';
+    
+    /**
+     *
+     * @var string 
+     */
+    protected $_scriptPath = null;
 
 	/**
-	 * @var EhrlichAndreas_Util_Mvc_Parameter Variables container
+	 * @var EhrlichAndreas_Util_Array Variables container
 	 */
 	protected $_vars = null;
     
+    /**
+     * 
+     */
     public function __construct()
     {
-        $this->_vars = new EhrlichAndreas_Util_Mvc_Parameter();
+        $this->_vars = new EhrlichAndreas_Util_Array();
     }
 
     /**
@@ -165,6 +182,56 @@ class EhrlichAndreas_Util_Mvc_View
     protected function _run()
     {
         include func_get_arg(0);
+    }
+
+    /**
+     *
+     * @param  array $config  Configuration object
+     * @param  string      $section Name of the config section containing view's definitions
+     * @throws EhrlichAndreas_Util_Exception
+     * @return EhrlichAndreas_Util_Mvc_Router
+     */
+    public function addConfig($config, $section = null)
+    {
+        if ($section !== null)
+        {
+            $config = EhrlichAndreas_Util_Array::objectToArray($config);
+            
+            if (!isset($config[$section]) || is_null($config[$section]))
+            {
+                throw new EhrlichAndreas_Util_Exception("No route configuration in section '{$section}'");
+            }
+
+            $config = $config[$section];
+        }
+
+        foreach ($config as $name => $info)
+        {
+            $name = strtolower($name);
+            
+            if ($name == 'encoding')
+            {
+                $this->setEncoding($info);
+            }
+            elseif ($name == 'escape')
+            {
+                $this->_escape = $info;
+            }
+            elseif ($name == 'fileextension')
+            {
+                $this->_fileExtension = $info;
+            }
+            elseif ($name == 'layout')
+            {
+                $this->_layout = $info;
+            }
+            elseif ($name == 'scriptpath')
+            {
+                $this->_scriptPath = $info;
+            }
+        }
+
+        return $this;
     }
 
 	/**

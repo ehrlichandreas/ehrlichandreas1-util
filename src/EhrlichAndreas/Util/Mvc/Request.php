@@ -17,7 +17,7 @@ class EhrlichAndreas_Util_Mvc_Request
      * Module
      * @var string
      */
-    protected $_module;
+    protected $_module = 'default';
 
     /**
      * Module key for retrieving module from params
@@ -29,7 +29,7 @@ class EhrlichAndreas_Util_Mvc_Request
      * Submodule
      * @var string
      */
-    protected $_submodule;
+    protected $_submodule = 'default';
 
     /**
      * Module key for retrieving submodule from params
@@ -41,7 +41,7 @@ class EhrlichAndreas_Util_Mvc_Request
      * Controller
      * @var string
      */
-    protected $_controller;
+    protected $_controller = 'index';
 
     /**
      * Controller key for retrieving controller from params
@@ -53,7 +53,7 @@ class EhrlichAndreas_Util_Mvc_Request
      * Action
      * @var string
      */
-    protected $_action;
+    protected $_action = 'index';
 
     /**
      * Action key for retrieving action from params

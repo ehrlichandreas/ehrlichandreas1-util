@@ -21,51 +21,69 @@ if (! file_exists(dirname(__FILE__) . '/_errorlog/') || ! is_dir(dirname(__FILE_
 
 require_once dirname(dirname(__FILE__)) . '/vendor/autoload_52.php';
 
+require_once dirname(__FILE__) . '/controllers/include.php';
+
+
 $path = 'nl/13/blblabla';
 
 $config = array
 (
-    'article'    => array
+    'router'    => array
     (
-        'route'     => 'ar\/(.*)|nl',
-        'defaults'  => array
+        'article'    => array
         (
-            'module'        => 'mainmodule',
-            'submodule'     => 'default',
-            'controller'    => 'article',
-            'action'        => 'newsletter',
-            'title'         => '',
+            'route'     => 'ar\/(.*)|nl',
+            'defaults'  => array
+            (
+                'module'        => 'mainmodule',
+                'submodule'     => 'default',
+                'controller'    => 'article',
+                'action'        => 'newsletter',
+                'title'         => '',
+            ),
+            'map'       => array
+            (
+                'title'         => '1',
+            ),
+            'reverse'   => 'ar/%1$s',
+            'callbacks' => array(),
         ),
-        'map'       => array
+        'newsletter'    => array
         (
-            'title'         => '1',
+            'route'     => 'nl\/(\\d+)\/(.*)|nl',
+            'defaults'  => array
+            (
+                'module'        => 'mainmodule',
+                'submodule'     => 'default',
+                'controller'    => 'article',
+                'action'        => 'newsletter',
+                'newsletter_id' => '-1',
+                'title'         => '',
+            ),
+            'map'       => array
+            (
+                'newsletter_id' => '1',
+                'title'         => '2',
+            ),
+            'reverse'   => 'nl/%1$s/%2$s',
+            'callbacks' => array(),
         ),
-        'reverse'   => 'ar/%1$s',
-        'callbacks' => array(),
-    ),
-    'newsletter'    => array
-    (
-        'route'     => 'nl\/(\\d+)\/(.*)|nl',
-        'defaults'  => array
-        (
-            'module'        => 'mainmodule',
-            'submodule'     => 'default',
-            'controller'    => 'article',
-            'action'        => 'newsletter',
-            'newsletter_id' => '-1',
-            'title'         => '',
-        ),
-        'map'       => array
-        (
-            'newsletter_id' => '1',
-            'title'         => '2',
-        ),
-        'reverse'   => 'nl/%1$s/%2$s',
-        'callbacks' => array(),
     ),
 );
 
-$request = new EhrlichAndreas_Util_Mvc_Request('http://local.de/' . $path);
+$mvc = EhrlichAndreas_Util_Mvc::getInstance();
+
+$mvc->addRouterConfig($config, 'router');
+
+//$response = $mvc->runByParameter(array());
+
+$response = $mvc->dispatch();
+
+var_dump($response);
+die();
+
+//$request = new EhrlichAndreas_Util_Mvc_Request('http://local.de/' . $path);
+$request = new EhrlichAndreas_Util_Mvc_Request();
 
 $router = new EhrlichAndreas_Util_Mvc_Router();
 

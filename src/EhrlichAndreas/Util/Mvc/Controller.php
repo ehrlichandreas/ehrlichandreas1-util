@@ -17,6 +17,32 @@ class EhrlichAndreas_Util_Mvc_Controller
      * @var EhrlichAndreas_Util_Mvc_View
      */
     protected $_view = null;
+    
+    /**
+     *
+     * @var EhrlichAndreas_Util_Mvc_Request 
+     */
+    protected $_request = null;
+    
+    /**
+     *
+     * @var type 
+     */
+    protected $_response = null;
+    
+    /**
+     * 
+     * @param EhrlichAndreas_Util_Mvc_Request $request
+     * @param type $response
+     */
+    public function __construct($request, $response = null)
+    {
+        $this->setRequest($request);
+        
+        $this->setResponse($response);
+        
+        $this->init();
+    }
 
     /**
      * Proxy for undefined methods.  Default behavior is to throw an
@@ -64,9 +90,11 @@ class EhrlichAndreas_Util_Mvc_Controller
     {
         $this->preDispatch();
 
-        $this->__call($action . 'Action', array());
+        $response = $this->__call($action . 'Action', array());
 
         $this->postDispatch();
+        
+        return $response;
     }
     
     /**
@@ -76,6 +104,33 @@ class EhrlichAndreas_Util_Mvc_Controller
     public function getInvokeParams()
     {
         return $this->_invokeParams;
+    }
+
+    /**
+     * Return the Request object
+     *
+     * @return EhrlichAndreas_Util_Mvc_Request
+     */
+    public function getRequest()
+    {
+        return $this->_request;
+    }
+
+    /**
+     * Return the Response object
+     *
+     * @return Zend_Controller_Response_Abstract
+     */
+    public function getResponse()
+    {
+        return $this->_response;
+    }
+    
+    /**
+     * 
+     */
+    protected function init()
+    {
     }
     
     /**
@@ -88,7 +143,7 @@ class EhrlichAndreas_Util_Mvc_Controller
      *
      * @return void
      */
-    public function preDispatch()
+    protected function preDispatch()
     {
     }
 
@@ -105,7 +160,7 @@ class EhrlichAndreas_Util_Mvc_Controller
      *
      * @return void
      */
-    public function postDispatch()
+    protected function postDispatch()
     {
     }
 
@@ -116,6 +171,32 @@ class EhrlichAndreas_Util_Mvc_Controller
     public function setInvokeParams($invokeParams = array())
     {
         $this->_invokeParams = $invokeParams;
+    }
+
+    /**
+     * Set the Request object
+     *
+     * @param EhrlichAndreas_Util_Mvc_Request $request
+     * @return EhrlichAndreas_Util_Mvc_Controller
+     */
+    public function setRequest($request)
+    {
+        $this->_request = $request;
+        
+        return $this;
+    }
+
+    /**
+     * Set the Response object
+     *
+     * @param type $response
+     * @return EhrlichAndreas_Util_Mvc_Controller
+     */
+    public function setResponse($response)
+    {
+        $this->_response = $response;
+        
+        return $this;
     }
     
     /**

@@ -106,6 +106,12 @@ class EhrlichAndreas_Util_Mvc_Router
         return $route;
     }
 
+    /**
+     * 
+     * @param EhrlichAndreas_Util_Mvc_Request $request
+     * @param array $params
+     * @return void
+     */
     protected function _setRequestParams($request, $params)
     {
         if (!is_object($request) || !method_exists($request, 'setParam'))
@@ -601,6 +607,17 @@ class EhrlichAndreas_Util_Mvc_Router
         $this->_invokeParams = array_merge($this->_invokeParams, $params);
         
         return $this;
+    }
+
+    /**
+     * 
+     * @param EhrlichAndreas_Util_Mvc_Request $request
+     * @param array $params
+     * @return void
+     */
+    public function setRequestParams($request, $params)
+    {
+        $this->_setRequestParams($request, $params);
     }
 
     /**
