@@ -343,6 +343,16 @@ class EhrlichAndreas_Util_Mvc_View
     }
 
     /**
+     * Return current layout
+     *
+     * @return string
+     */
+    public function getLayout()
+    {
+        return $this->_layout;
+    }
+
+    /**
      * Return full path to a view script specified by $name
      *
      * @param  string $name

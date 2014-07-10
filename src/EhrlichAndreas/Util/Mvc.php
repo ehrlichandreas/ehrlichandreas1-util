@@ -87,17 +87,24 @@ class EhrlichAndreas_Util_Mvc
     /**
      * TODO
      * 
-     * @return type
+     * @param string $uri
+     * @return string
      */
-    public function dispatch()
+    public function dispatch($uri = null)
     {
-		$returnResponse = $this->returnResponse();
+        $router = $this->getRouter();
         
-        $request = new EhrlichAndreas_Util_Mvc_Request();
+		$request = new EhrlichAndreas_Util_Mvc_Request($uri);
+        
+        $request = $router->route($request);
         
         $response = $this->runByParameter($request);
         
-        return $response;
+        $this->getView()->assign('maincontent', $response);
+        
+        $layout = $this->getView()->getLayout();
+        
+        return $this->getView()->render($layout);
     }
 
     /**
@@ -199,7 +206,7 @@ class EhrlichAndreas_Util_Mvc
             
             $request = new EhrlichAndreas_Util_Mvc_Request();
             
-            $this->_router->setRequestParams($request, $invokeParams);
+            $this->getRouter()->setRequestParams($request, $invokeParams);
         }
         else
         {
@@ -216,6 +223,8 @@ class EhrlichAndreas_Util_Mvc
         $action = $request->getActionName();
         
         $controller = new $class($request);
+        
+        $controller->setView($this->getView());
         
         return $controller->dispatch($action);
     }

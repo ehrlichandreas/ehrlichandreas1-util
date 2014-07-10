@@ -1,5 +1,7 @@
 <?php
 
+$microtime = microtime(true);
+
 ini_set('display_startup_errors', true);
 
 ini_set('display_errors', true);
@@ -23,8 +25,8 @@ require_once dirname(dirname(__FILE__)) . '/vendor/autoload_52.php';
 
 require_once dirname(__FILE__) . '/controllers/include.php';
 
-
-$path = 'nl/13/blblabla';
+//change path or set it to null for tests
+$path = 'http://local.de/nl/13/blblabla';
 
 $config = array
 (
@@ -69,32 +71,26 @@ $config = array
             'callbacks' => array(),
         ),
     ),
+    'view'  => array
+    (
+        'scriptPath'    => dirname(__FILE__) . '/views',
+        'fileExtension' => 'php',
+    ),
 );
 
 $mvc = EhrlichAndreas_Util_Mvc::getInstance();
 
 $mvc->addRouterConfig($config, 'router');
 
+$mvc->addViewConfig($config, 'view');
+
 //$response = $mvc->runByParameter(array());
 
-$response = $mvc->dispatch();
+$response = $mvc->dispatch($path);
 
-var_dump($response);
-die();
-
-//$request = new EhrlichAndreas_Util_Mvc_Request('http://local.de/' . $path);
-$request = new EhrlichAndreas_Util_Mvc_Request();
-
-$router = new EhrlichAndreas_Util_Mvc_Router();
-
-$router->addConfig($config);
-
-$matched = $router->route($request);
-
-var_dump($matched);
-
-die();
-
-echo $route->assemble($map, true, true);
+echo $response;
 
 echo "\n\n";
+echo microtime(true) - $microtime;
+echo "\n\n";
+die();

@@ -687,6 +687,16 @@ class EhrlichAndreas_Util_Mvc_Request
     }
 
     /**
+     * Get list of allowed parameter sources
+     *
+     * @return array
+     */
+    public function getParamSources()
+    {
+        return $this->_paramSources;
+    }
+
+    /**
      * Retrieve an array of parameters
      *
      * Retrieves a merged array of parameters, with precedence of userland
