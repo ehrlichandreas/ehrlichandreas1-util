@@ -23,10 +23,16 @@
     },
     "repositories":
     [
+        {
+            "type": "git",
+            "url": "https://github.com/ehrlichandreas/composer-php52.git"
+        }
     ],
     "require": 
     {
-        "php":                              ">=5.1"
+        "php":                              ">=5.1",
+
+        "ehrlichandreas/composer-php52":    "*"
     },
     "require-dev":
     {
