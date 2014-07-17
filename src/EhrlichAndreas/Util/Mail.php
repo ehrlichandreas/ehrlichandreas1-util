@@ -1034,8 +1034,25 @@ class EhrlichAndreas_Util_Mail
                 {
                     $subject = str_replace(' replacement=\'%replacement%\'', $tmp, $subject);
                 }
+                else
+                {
+                    $subject = preg_replace('#\\[base64.*\\[\\/base64\\]#ui', '', $subject);
+                }
                 
-				$subject = EhrlichAndreas_Util_Vsprintf::vsprintf($subject, $replacement, $vsprintfTimes);
+                if (!is_null($filter))
+                {
+                    $subject = str_replace(' replacement=\'%replacement%\'', $tmp, $subject);
+                    
+                    $subject = EhrlichAndreas_Util_Vsprintf::vsprintf($subject, $replacement, $vsprintfTimes);
+                }
+                else
+                {
+                    $subject = EhrlichAndreas_Util_Vsprintf::vsprintf($subject, $replacement, 1);
+                    
+                    $subject = preg_replace('#\\[base64.*\\[\\/base64\\]#ui', '', $subject);
+                    
+                    $subject = EhrlichAndreas_Util_Vsprintf::vsprintf($subject, $replacement, $vsprintfTimes - 1);
+                }
 			}
             
             if (!is_null($subject) && !is_null($filter))
@@ -1050,9 +1067,17 @@ class EhrlichAndreas_Util_Mail
                 if (!is_null($filter))
                 {
                     $bodyHtml = str_replace(' replacement=\'%replacement%\'', $tmp, $bodyHtml);
+                    
+                    $bodyHtml = EhrlichAndreas_Util_Vsprintf::vsprintf($bodyHtml, $replacement, $vsprintfTimes);
                 }
-                
-				$bodyHtml = EhrlichAndreas_Util_Vsprintf::vsprintf($bodyHtml, $replacement, $vsprintfTimes);
+                else
+                {
+                    $bodyHtml = EhrlichAndreas_Util_Vsprintf::vsprintf($bodyHtml, $replacement, 1);
+                    
+                    $bodyHtml = preg_replace('#\\[base64.*\\[\\/base64\\]#ui', '', $bodyHtml);
+                    
+                    $bodyHtml = EhrlichAndreas_Util_Vsprintf::vsprintf($bodyHtml, $replacement, $vsprintfTimes - 1);
+                }
 			}
             
             if (!is_null($bodyHtml) && !is_null($filter))
@@ -1072,6 +1097,16 @@ class EhrlichAndreas_Util_Mail
                 if (!is_null($filter))
                 {
                     $bodyText = str_replace(' replacement=\'%replacement%\'', $tmp, $bodyText);
+                    
+                    $bodyText = EhrlichAndreas_Util_Vsprintf::vsprintf($bodyText, $replacement, $vsprintfTimes);
+                }
+                else
+                {
+                    $bodyText = EhrlichAndreas_Util_Vsprintf::vsprintf($bodyText, $replacement, 1);
+                    
+                    $bodyText = preg_replace('#\\[base64.*\\[\\/base64\\]#ui', '', $bodyText);
+                    
+                    $bodyText = EhrlichAndreas_Util_Vsprintf::vsprintf($bodyText, $replacement, $vsprintfTimes - 1);
                 }
                 
 				$bodyText = EhrlichAndreas_Util_Vsprintf::vsprintf($bodyText, $replacement, $vsprintfTimes);
@@ -1418,7 +1453,7 @@ class EhrlichAndreas_Util_Mail
 			
 			$messageTransport = $conf['transport'];
 
-			$messageTransport->send($message);
+			$send = $messageTransport->send($message);
 
 			if ($conf['zfversion'] == 1)
 			{
@@ -1433,7 +1468,7 @@ class EhrlichAndreas_Util_Mail
 			{
 			}
 			
-			return $this;
+			return $send;
 		}
 	}
 }

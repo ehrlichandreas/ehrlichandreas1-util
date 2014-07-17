@@ -83,6 +83,7 @@ class EhrlichAndreas_Util_Vsprintf
                         '{' . $key . '}',
                         '[' . $key . ']',
                         '[i18n]' . $key . '[/i18n]',
+                        '[i18n replacement=\'\']' . $key . '[/i18n]',
                         '[i18n replacement=\'%replacement%\']' . $key . '[/i18n]',
                         '[i18n replacement="%replacement%"]' . $key . '[/i18n]',
                     );
@@ -123,7 +124,18 @@ class EhrlichAndreas_Util_Vsprintf
 
                 if (count($args) >= $expected)
                 {
-                    $format = vsprintf($format, $args); // yeah!
+                    $error_reporting = error_reporting();
+                    
+                    error_reporting(0);
+
+                    $formatTmp = vsprintf($format, $args); // yeah!
+                    
+                    error_reporting($error_reporting);
+
+                    if (strlen($formatTmp) > 0)
+                    {
+                    	$format = $formatTmp;
+                    }
                 }
             }
         }
