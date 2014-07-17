@@ -1403,11 +1403,14 @@ class EhrlichAndreas_Util_Mail
 			{
             	$defaultTranslator = Zend_Validate_Abstract::getDefaultTranslator();
 
-            	Zend_Validate_Abstract::setDefaultTranslator(null);
-                
-                $defaultTranslatorOptions = $defaultTranslator->getOptions();
-                
-                $defaultTranslator->setOptions(array('logUntranslated'=>false));
+                if (is_object($defaultTranslator))
+                {
+                    Zend_Validate_Abstract::setDefaultTranslator(null);
+
+                    $defaultTranslatorOptions = $defaultTranslator->getOptions();
+
+                    $defaultTranslator->setOptions(array('logUntranslated'=>false));
+                }
 			}
 			else
 			{
@@ -1419,9 +1422,12 @@ class EhrlichAndreas_Util_Mail
 
 			if ($conf['zfversion'] == 1)
 			{
-                $defaultTranslator->setOptions($defaultTranslatorOptions);
-                
-            	Zend_Validate_Abstract::setDefaultTranslator($defaultTranslator);
+                if (is_object($defaultTranslator))
+                {
+                    $defaultTranslator->setOptions($defaultTranslatorOptions);
+
+                    Zend_Validate_Abstract::setDefaultTranslator($defaultTranslator);
+                }
 			}
 			else
 			{
