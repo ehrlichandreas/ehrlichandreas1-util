@@ -1454,7 +1454,16 @@ class EhrlichAndreas_Util_Mail
 			
 			$messageTransport = $conf['transport'];
 
-			$sendTmp = $messageTransport->send($message);
+            try
+            {
+                $messageTransport->send($message);
+                
+                $sendTmp = true;
+            }
+            catch(Exception $e)
+            {
+                $sendTmp = false;
+            }
             
             $send = $send && $sendTmp;
 
