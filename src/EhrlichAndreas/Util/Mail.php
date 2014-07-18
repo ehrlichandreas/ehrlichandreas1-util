@@ -901,6 +901,7 @@ class EhrlichAndreas_Util_Mail
             $tmp = ' replacement=\''.$tmp.'\'';
         }
 
+        $send = true;
         
 		foreach ($config as $conf)
 		{
@@ -1453,7 +1454,9 @@ class EhrlichAndreas_Util_Mail
 			
 			$messageTransport = $conf['transport'];
 
-			$send = $messageTransport->send($message);
+			$sendTmp = $messageTransport->send($message);
+            
+            $send = $send && $sendTmp;
 
 			if ($conf['zfversion'] == 1)
 			{
@@ -1467,9 +1470,9 @@ class EhrlichAndreas_Util_Mail
 			else
 			{
 			}
-			
-			return $send;
 		}
+			
+        return $send;
 	}
 }
 
