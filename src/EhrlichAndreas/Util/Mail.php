@@ -1027,6 +1027,7 @@ class EhrlichAndreas_Util_Mail
 				}
 			}
 			
+            /*
 			if (isset($conf['subject']) && strlen($conf['subject']) > 0)
 			{
                 $subject = $conf['subject'];
@@ -1055,12 +1056,40 @@ class EhrlichAndreas_Util_Mail
                     $subject = EhrlichAndreas_Util_Vsprintf::vsprintf($subject, $replacement, $vsprintfTimes - 1);
                 }
 			}
+             * 
+             */
+            
+			if (isset($conf['subject']) && strlen($conf['subject']) > 0)
+			{
+                $subject = $conf['subject'];
+                
+                if (!is_null($filter))
+                {
+                    $subject = str_replace(' replacement=\'%replacement%\'', $tmp, $subject);
+                    
+                    $subject = EhrlichAndreas_Util_Vsprintf::vsprintf($subject, $replacement, $vsprintfTimes);
+                }
+                else
+                {
+                    for ($vsprintfTime = 0; $vsprintfTime < $vsprintfTimes; $vsprintfTime++)
+                    {
+                        $subject = preg_replace('#\\[base64.*\\[\\/base64\\]#sui', '', $subject);
+                        
+                        $subject = str_replace(' replacement=\'%replacement%\'', '', $subject);
+                        
+                        $subject = str_replace(' replacement=\'\'', '', $subject);
+                        
+                        $subject = EhrlichAndreas_Util_Vsprintf::vsprintf($subject, $replacement);
+                    }
+                }
+            }
             
             if (!is_null($subject) && !is_null($filter))
             {
                 $subject = call_user_func_array($filter, array($subject));
             }
 			
+            /*
 			if (isset($conf['body']['html']) && strlen($conf['body']['html']) > 0)
 			{
                 $bodyHtml = $conf['body']['html'];
@@ -1080,6 +1109,33 @@ class EhrlichAndreas_Util_Mail
                     $bodyHtml = EhrlichAndreas_Util_Vsprintf::vsprintf($bodyHtml, $replacement, $vsprintfTimes - 1);
                 }
 			}
+             * 
+             */
+            
+			if (isset($conf['body']['html']) && strlen($conf['body']['html']) > 0)
+			{
+                $bodyHtml = $conf['body']['html'];
+                
+                if (!is_null($filter))
+                {
+                    $bodyHtml = str_replace(' replacement=\'%replacement%\'', $tmp, $bodyHtml);
+                    
+                    $bodyHtml = EhrlichAndreas_Util_Vsprintf::vsprintf($bodyHtml, $replacement, $vsprintfTimes);
+                }
+                else
+                {
+                    for ($vsprintfTime = 0; $vsprintfTime < $vsprintfTimes; $vsprintfTime++)
+                    {
+                        $bodyHtml = preg_replace('#\\[base64.*\\[\\/base64\\]#sui', '', $bodyHtml);
+                        
+                        $bodyHtml = str_replace(' replacement=\'%replacement%\'', '', $bodyHtml);
+                        
+                        $bodyHtml = str_replace(' replacement=\'\'', '', $bodyHtml);
+                        
+                        $bodyHtml = EhrlichAndreas_Util_Vsprintf::vsprintf($bodyHtml, $replacement);
+                    }
+                }
+            }
             
             if (!is_null($bodyHtml) && !is_null($filter))
             {
@@ -1091,6 +1147,7 @@ class EhrlichAndreas_Util_Mail
 				$bodyHtml = preg_replace('#\r?\n|\r\n?#ui', $conf['eol'], $bodyHtml);
             }
 			
+            /*
 			if (isset($conf['body']['text']) && strlen($conf['body']['text']) > 0)
 			{
                 $bodyText = $conf['body']['text'];
@@ -1112,6 +1169,33 @@ class EhrlichAndreas_Util_Mail
                 
 				$bodyText = EhrlichAndreas_Util_Vsprintf::vsprintf($bodyText, $replacement, $vsprintfTimes);
 			}
+             * 
+             */
+            
+			if (isset($conf['body']['text']) && strlen($conf['body']['text']) > 0)
+			{
+                $bodyText = $conf['body']['text'];
+                
+                if (!is_null($filter))
+                {
+                    $bodyText = str_replace(' replacement=\'%replacement%\'', $tmp, $bodyText);
+                    
+                    $bodyText = EhrlichAndreas_Util_Vsprintf::vsprintf($bodyText, $replacement, $vsprintfTimes);
+                }
+                else
+                {
+                    for ($vsprintfTime = 0; $vsprintfTime < $vsprintfTimes; $vsprintfTime++)
+                    {
+                        $bodyText = preg_replace('#\\[base64.*\\[\\/base64\\]#sui', '', $bodyText);
+                        
+                        $bodyText = str_replace(' replacement=\'%replacement%\'', '', $bodyText);
+                        
+                        $bodyText = str_replace(' replacement=\'\'', '', $bodyText);
+                        
+                        $bodyText = EhrlichAndreas_Util_Vsprintf::vsprintf($bodyText, $replacement);
+                    }
+                }
+            }
             
             if (!is_null($bodyText) && !is_null($filter))
             {
