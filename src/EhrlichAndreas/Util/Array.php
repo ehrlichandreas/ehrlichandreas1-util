@@ -10,6 +10,23 @@ error_reporting(0);
  */
 class EhrlichAndreas_Util_Array extends ArrayObject implements Serializable
 {
+    /**
+     * Constructor
+     *
+     * Enforces that we have an array, and enforces parameter access to array
+     * elements.
+     *
+     * @param  array $values
+     */
+    public function __construct(array $values = null)
+    {
+        if (null === $values)
+        {
+            $values = array();
+        }
+        
+        parent::__construct($values, ArrayObject::ARRAY_AS_PROPS);
+    }
     
 	/**
 	 * Returns the column/value data as an array.
@@ -275,6 +292,32 @@ class EhrlichAndreas_Util_Array extends ArrayObject implements Serializable
         return true;
     }
 
+    /**
+     * Populate from native PHP array
+     *
+     * @param  array $values
+     * @return void
+     */
+    public function fromArray(array $values)
+    {
+        $this->exchangeArray($values);
+    }
+
+    /**
+     * Populate from query string
+     *
+     * @param  string $string
+     * @return void
+     */
+    public function fromString($string)
+    {
+        $array = array();
+        
+        parse_str($string, $array);
+        
+        $this->fromArray($array);
+    }
+
     public static function objectToArray ($array = array())
     {
         if (! is_array($array) && ! is_object($array))
@@ -306,6 +349,24 @@ class EhrlichAndreas_Util_Array extends ArrayObject implements Serializable
         }
         
         return $array;
+    }
+
+    /**
+     * Retrieve by key
+     *
+     * Returns null if the key does not exist.
+     *
+     * @param  string $name
+     * @return mixed
+     */
+    public function offsetGet($name)
+    {
+        if ($this->offsetExists($name))
+        {
+            return parent::offsetGet($name);
+        }
+        
+        return null;
     }
 
     public static function arrayFlipMulti ($param = array())
@@ -440,6 +501,16 @@ class EhrlichAndreas_Util_Array extends ArrayObject implements Serializable
     {
 		return (array) $this->getArrayCopy();
 	}
+
+    /**
+     * Serialize to query string
+     *
+     * @return string
+     */
+    public function toString()
+    {
+        return http_build_query($this);
+    }
     
 	/**
 	 * Serialize an ArrayObject
