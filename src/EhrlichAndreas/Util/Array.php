@@ -363,7 +363,9 @@ class EhrlichAndreas_Util_Array extends ArrayObject implements Serializable
     {
         if ($this->offsetExists($name))
         {
-            return parent::offsetGet($name);
+			$var = & $this[$name];
+            
+			return $var;
         }
         
         return null;
