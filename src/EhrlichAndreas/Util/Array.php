@@ -351,26 +351,6 @@ class EhrlichAndreas_Util_Array extends ArrayObject implements Serializable
         return $array;
     }
 
-    /**
-     * Retrieve by key
-     *
-     * Returns null if the key does not exist.
-     *
-     * @param  string $name
-     * @return mixed
-     */
-    public function offsetGet($name)
-    {
-        if ($this->offsetExists($name))
-        {
-			$var = & $this[$name];
-            
-			return $var;
-        }
-        
-        return null;
-    }
-
     public static function arrayFlipMulti ($param = array())
     {
         $return = array();
