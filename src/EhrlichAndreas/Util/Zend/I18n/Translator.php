@@ -29,7 +29,9 @@ class EhrlichAndreas_Util_Zend_I18n_Translator
         
         $messages = var_export($translator, true);
         
-        $messages = preg_replace('#(\w+\\\\)*\w+\:\:__set_state#ui', 'array', $messages);
+        #$messages = preg_replace('#(\w+\\\\)*\w+\:\:__set_state#ui', 'array', $messages);
+        
+        $messages = preg_replace('#([\w\\\\]+::__set_state)#', 'array', $messages);
         
         $messages = '?><?php return ' . $messages . ';';
         

@@ -1073,7 +1073,7 @@ class EhrlichAndreas_Util_Mail
                 {
                     for ($vsprintfTime = 0; $vsprintfTime < $vsprintfTimes; $vsprintfTime++)
                     {
-                        $subject = preg_replace('#\\[base64.*\\[\\/base64\\]#sui', '', $subject);
+                        $subject = preg_replace('#\\[base64.*\\[\\/base64\\]#si', '', $subject);
                         
                         $subject = str_replace(' replacement=\'%replacement%\'', '', $subject);
                         
@@ -1126,7 +1126,7 @@ class EhrlichAndreas_Util_Mail
                 {
                     for ($vsprintfTime = 0; $vsprintfTime < $vsprintfTimes; $vsprintfTime++)
                     {
-                        $bodyHtml = preg_replace('#\\[base64.*\\[\\/base64\\]#sui', '', $bodyHtml);
+                        $bodyHtml = preg_replace('#\\[base64.*\\[\\/base64\\]#si', '', $bodyHtml);
                         
                         $bodyHtml = str_replace(' replacement=\'%replacement%\'', '', $bodyHtml);
                         
@@ -1144,7 +1144,7 @@ class EhrlichAndreas_Util_Mail
 			
             if (!is_null($bodyHtml))
             {
-				$bodyHtml = preg_replace('#\r?\n|\r\n?#ui', $conf['eol'], $bodyHtml);
+				$bodyHtml = preg_replace('#\r?\n|\r\n?#', $conf['eol'], $bodyHtml);
             }
 			
             /*
@@ -1186,7 +1186,7 @@ class EhrlichAndreas_Util_Mail
                 {
                     for ($vsprintfTime = 0; $vsprintfTime < $vsprintfTimes; $vsprintfTime++)
                     {
-                        $bodyText = preg_replace('#\\[base64.*\\[\\/base64\\]#sui', '', $bodyText);
+                        $bodyText = preg_replace('#\\[base64.*\\[/base64\\]#si', '', $bodyText);
                         
                         $bodyText = str_replace(' replacement=\'%replacement%\'', '', $bodyText);
                         
@@ -1204,7 +1204,7 @@ class EhrlichAndreas_Util_Mail
 			
             if (!is_null($bodyText))
             {
-				$bodyText = preg_replace('#\r?\n|\r\n?#ui', $conf['eol'], $bodyText);
+				$bodyText = preg_replace('#\r?\n|\r\n?#', $conf['eol'], $bodyText);
             }
 			
 			
@@ -1496,7 +1496,7 @@ class EhrlichAndreas_Util_Mail
 				}
 			}
             
-            /**
+            /* *
             echo '<pre>';
             var_dump
             (
@@ -1515,9 +1515,9 @@ class EhrlichAndreas_Util_Mail
                 $bodyHtml,
                 $bodyText
             );
-            print_r($replacement);
-            die();
-            **/
+            //print_r($replacement);
+            //die();
+            /* */
 
 			if ($conf['zfversion'] == 1)
 			{
