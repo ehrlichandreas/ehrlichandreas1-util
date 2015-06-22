@@ -1,7 +1,7 @@
 {
     "name":         "ehrlichandreas/ehrlichandreas1-util",
     "description":  "Zend Framework like util module",
-    "type":         "util",
+    "type":         "library",
     "keywords": 
     [
     ],
@@ -23,10 +23,6 @@
     },
     "repositories":
     [
-        {
-            "type": "git",
-            "url": "https://github.com/ehrlichandreas/composer-php52.git"
-        }
     ],
     "require": 
     {
